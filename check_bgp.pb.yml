@@ -1,0 +1,21 @@
+---
+- name: Run JSNAPy tests
+  hosts: all
+  roles:
+  - Juniper.junos
+  connection: local
+  gather_facts: no
+
+  tasks:
+  - name: JSNAPy
+    juniper_junos_jsnapy:
+      host={{ ansible_host | default(inventory_hostname) }}
+      action="snapcheck"
+      test_files="test_ip_fabric.yml"
+      logdir="./"
+    failed_when: test1.final_result == "Failed"
+    register: test1
+  - name: Verify all JSNAPy tests passed
+    assert:
+      that:
+        - "test1.passPercentage == 100"

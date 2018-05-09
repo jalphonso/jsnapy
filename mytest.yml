@@ -1,0 +1,19 @@
+test_interfaces_flap:
+  - rpc: get-interface-information
+  - kwargs:
+      extensive: True
+      dev_timeout: 300
+  - iterate:
+      xpath: //physical-interface[interface-flapped]
+      id: ./name
+      tests:
+        - not-range: interface-flapped/@seconds,1,86400
+          info: "Test Succeeded !! interface {{pre['name']}} didn't flap in the last 24 hours"
+          err: "Test Failed !! interface {{pre['name']}} flapped at {{pre['interface-flapped']}}" 
+        - no-diff: input-error-list/input-errors 
+          info: "Test Succeeded !! interface {{post['name']}} had no further input errors in the last 24 hours"
+          err: "Test Failed !! interface {{post['name']}} has had {{post['input-error-list/input-errors']}} input errors it used to be {{pre['input-error-list/input-errors']}}" 
+        - no-diff: output-error-list/carrier-transitions 
+          info: Test Succeeded !! interface {{post['name']}} had no further output errors in the last 24 hours
+          err: Test Failed !! interface {{post["name"]}} has had {{post["output-error-list/carrier-transitions"]}} output errors it used to be {{pre['output-error-list/carrier-transitions']}} 
+
