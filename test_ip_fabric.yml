@@ -3,16 +3,9 @@ tests_include:
   - test_evpn
 
 test_bgp:
-  - rpc: get-bgp-summary-information
+  - rpc: get-bgp-neighbor-information
   - kwargs:
       group: UNDERLAY
-  - iterate:
-      xpath: '//bgp-information'
-      tests:
-        - is-equal: down-peer-count, 0
-          info: "Test succeeded!! There are no down peers in group UNDERLAY"
-          err: "Test failed!! There are <{{post['down-peer-count']}}> down peers in group UNDERLAY"
-  - rpc: get-bgp-neighbor-information
   - iterate:
       xpath: '//bgp-information/bgp-peer'
       tests:
