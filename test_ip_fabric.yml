@@ -3,7 +3,7 @@ tests_include:
   - test_evpn
 
 test_bgp:
-  - rpc: get-bgp-neighbor-information
+  - rpc: get-bgp-summary-information
   - kwargs:
       group: UNDERLAY
   - iterate:
